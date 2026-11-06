@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quản lý sinh viên | SIS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: header}"></div>
+<main class="page-shell">
+    <section class="page-heading">
+        <div>
+            <p class="eyebrow">TRAINING DEPARTMENT</p>
+            <h1>Thông tin sinh viên</h1>
+            <p class="subheading">Theo dõi danh sách sinh viên và kết quả học tập.</p>
+        </div>
+        <div class="heading-actions">
+            <a class="button button-secondary" th:href="@{/scores/new}"><span>＋</span> Nhập điểm</a>
+            <a class="button button-primary" th:href="@{/students/new}"><span>＋</span> Sinh viên</a>
+        </div>
+    </section>
+
+    <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"></div>
+
+    <section class="stats-grid" aria-label="Thống kê">
+        <article class="stat-card">
+            <span class="stat-icon student-icon">ST</span>
+            <div><p>Tổng sinh viên</p><strong th:text="${studentCount}">0</strong></div>
+        </article>
+        <article class="stat-card">
+            <span class="stat-icon subject-icon">MH</span>
+            <div><p>Môn học</p><strong th:text="${subjectCount}">0</strong></div>
+        </article>
+        <article class="stat-card">
+            <span class="stat-icon grade-icon">A+</span>
+            <div><p>Công thức điểm</p><strong class="formula">30% · 70%</strong></div>
+        </article>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <div><h2>Bảng điểm sinh viên</h2><p>Điểm tổng kết = 0,3 × Điểm 1 + 0,7 × Điểm 2</p></div>
+            <span class="result-count" th:text="${studentCount} + ' sinh viên'">0 sinh viên</span>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>SINH VIÊN</th>
+                    <th>MÃ SV</th>
+                    <th>ĐỊA CHỈ</th>
+                    <th>KẾT QUẢ MÔN HỌC</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="student : ${students}">
+                    <td>
+                        <div class="student-cell">
+                            <span class="avatar" th:text="${#strings.substring(student.fullName, 0, 1)}">S</span>
+                            <span class="student-name" th:text="${student.fullName}">Tên sinh viên</span>
+                        </div>
+                    </td>
+                    <td><span class="code-chip" th:text="${student.studentCode}">Mã</span></td>
+                    <td class="muted" th:text="${student.address != null ? student.address : '—'}">Địa chỉ</td>
+                    <td>
+                        <div class="score-list" th:if="${!student.scores.isEmpty()}">
+                            <div class="score-item" th:each="score : ${student.scores}">
+                                <span class="subject-label">
+                                    <strong th:text="${score.subjectCode}">JAVA</strong>
+                                    <small th:text="${score.subjectName + ' · ' + score.credit + ' tín chỉ'}">Môn học</small>
+                                </span>
+                                <span class="score-detail">
+                                    <small th:text="${score.score1 + ' / ' + score.score2}">8 / 7</small>
+                                    <strong th:text="${score.weightedScore}">7.45</strong>
+                                </span>
+                                <span class="grade-badge" th:classappend="' grade-' + ${#strings.toLowerCase(score.grade)}"
+                                      th:text="${score.grade}">B</span>
+                            </div>
+                        </div>
+                        <span class="muted" th:if="${student.scores.isEmpty()}">Chưa có điểm</span>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(students)}">
+                    <td colspan="4">
+                        <div class="empty-state">
+                            <span class="empty-icon">✦</span>
+                            <strong>Chưa có sinh viên nào</strong>
+                            <p>Thêm sinh viên để bắt đầu quản lý kết quả học tập.</p>
+                            <a class="button button-primary" th:href="@{/students/new}">＋ Thêm sinh viên</a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="grade-legend">
+            <span><b class="grade-dot grade-a"></b> A: 8,0 – 10</span>
+            <span><b class="grade-dot grade-b"></b> B: 6,0 – 7,9</span>
+            <span><b class="grade-dot grade-d"></b> D: 4,0 – 5,9</span>
+            <span><b class="grade-dot grade-f"></b> F: dưới 4,0</span>
+        </div>
+    </section>
+    <footer>Student Information System <span>·</span> Training Department</footer>
+</main>
+</body>
+</html>

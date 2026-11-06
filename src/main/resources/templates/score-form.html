@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nhập điểm | SIS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: header}"></div>
+<main class="form-shell">
+    <a class="back-link" th:href="@{/}">← Quay lại danh sách</a>
+    <section class="form-card">
+        <div class="form-title">
+            <span class="form-icon grade-icon">A+</span>
+            <div><p class="eyebrow">KẾT QUẢ HỌC TẬP</p><h1>Nhập điểm môn học</h1><p>Điểm tổng kết được tính tự động theo tỷ lệ 30% và 70%.</p></div>
+        </div>
+        <div class="alert alert-info" th:if="${#lists.isEmpty(students)}">
+            Chưa có sinh viên. <a th:href="@{/students/new}">Thêm sinh viên trước</a> khi nhập điểm.
+        </div>
+        <form th:action="@{/scores}" th:object="${scoreForm}" method="post">
+            <label for="studentId">Sinh viên <span>*</span></label>
+            <select id="studentId" th:field="*{studentId}" required>
+                <option value="">-- Chọn sinh viên --</option>
+                <option th:each="student : ${students}" th:value="${student.studentId}"
+                        th:text="${student.studentCode + ' — ' + student.fullName}"></option>
+            </select>
+            <small class="field-error" th:if="${#fields.hasErrors('studentId')}" th:errors="*{studentId}"></small>
+
+            <label for="subjectId">Môn học <span>*</span></label>
+            <select id="subjectId" th:field="*{subjectId}" required>
+                <option value="">-- Chọn môn học --</option>
+                <option th:each="subject : ${subjects}" th:value="${subject.subjectId}"
+                        th:text="${subject.subjectCode + ' — ' + subject.subjectName + ' (' + subject.credit + ' tín chỉ)'}"></option>
+            </select>
+            <small class="field-error" th:if="${#fields.hasErrors('subjectId')}" th:errors="*{subjectId}"></small>
+
+            <div class="score-inputs">
+                <div>
+                    <label for="score1">Điểm lần 1 <span>*</span></label>
+                    <input id="score1" type="number" th:field="*{score1}" min="0" max="10" step="0.01" placeholder="0 – 10" required>
+                    <small class="field-error" th:if="${#fields.hasErrors('score1')}" th:errors="*{score1}"></small>
+                </div>
+                <div>
+                    <label for="score2">Điểm lần 2 <span>*</span></label>
+                    <input id="score2" type="number" th:field="*{score2}" min="0" max="10" step="0.01" placeholder="0 – 10" required>
+                    <small class="field-error" th:if="${#fields.hasErrors('score2')}" th:errors="*{score2}"></small>
+                </div>
+            </div>
+            <div class="formula-note">Điểm tổng kết = (Điểm lần 1 × 0,3) + (Điểm lần 2 × 0,7)</div>
+            <div class="form-actions">
+                <a class="button button-plain" th:href="@{/}">Hủy</a>
+                <button class="button button-primary" type="submit" th:disabled="${#lists.isEmpty(students) or #lists.isEmpty(subjects)}">Lưu điểm</button>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

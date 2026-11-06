@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thêm sinh viên | SIS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: header}"></div>
+<main class="form-shell">
+    <a class="back-link" th:href="@{/}">← Quay lại danh sách</a>
+    <section class="form-card">
+        <div class="form-title">
+            <span class="form-icon student-icon">ST</span>
+            <div><p class="eyebrow">HỒ SƠ SINH VIÊN</p><h1>Thêm sinh viên mới</h1><p>Nhập thông tin cơ bản của sinh viên.</p></div>
+        </div>
+        <form th:action="@{/students}" th:object="${studentForm}" method="post">
+            <label for="studentCode">Mã sinh viên <span>*</span></label>
+            <input id="studentCode" type="text" th:field="*{studentCode}" placeholder="Ví dụ: 2007A10" maxlength="20" required>
+            <small class="field-error" th:if="${#fields.hasErrors('studentCode')}" th:errors="*{studentCode}"></small>
+
+            <label for="fullName">Họ và tên <span>*</span></label>
+            <input id="fullName" type="text" th:field="*{fullName}" placeholder="Nhập họ và tên" maxlength="100" required>
+            <small class="field-error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></small>
+
+            <label for="address">Địa chỉ</label>
+            <input id="address" type="text" th:field="*{address}" placeholder="Tỉnh / thành phố" maxlength="255">
+            <small class="field-error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></small>
+
+            <div class="form-actions">
+                <a class="button button-plain" th:href="@{/}">Hủy</a>
+                <button class="button button-primary" type="submit">Lưu sinh viên</button>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

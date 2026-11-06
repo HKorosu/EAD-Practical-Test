@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header class="topbar" th:fragment="header">
+    <a class="brand" th:href="@{/}">
+        <span class="brand-mark">S</span>
+        <span>SIS <small>STUDENT INFORMATION SYSTEM</small></span>
+    </a>
+    <nav aria-label="Điều hướng chính">
+        <a th:href="@{/}">Tổng quan</a>
+        <a th:href="@{/students/new}">Sinh viên</a>
+        <a th:href="@{/scores/new}">Điểm số</a>
+    </nav>
+</header>
+</body>
+</html>
